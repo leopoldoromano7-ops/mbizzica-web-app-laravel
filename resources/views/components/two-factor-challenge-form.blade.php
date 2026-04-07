@@ -1,8 +1,14 @@
-<form method="POST" action="/two-factor-challenge">
-    @csrf
+<section class="auth-shell">
+    <article class="surface-panel auth-panel">
+        <form method="POST" action="/two-factor-challenge" class="stack-form">
+            @csrf
 
-    <label for="code" class="form-label">Codice a 6 cifre:</label>
-    <input id="code" name="code" type="text" required />
+            <div class="field-group">
+                <label for="code" class="form-label">Codice a 6 cifre</label>
+                <input id="code" name="code" type="text" class="form-control" required>
+            </div>
 
-    <button type="submit" class="btn btn-prumary mt-3">Conferma</button>
-</form>
+            <button type="submit" class="btn btn-neon">Conferma</button>
+        </form>
+    </article>
+</section>

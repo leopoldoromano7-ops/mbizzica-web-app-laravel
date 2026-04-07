@@ -11,6 +11,24 @@ class Paste extends Model
 {
     protected $fillable = ['title', 'content', 'file_path', 'attachment_path', 'visibility', 'user_id', 'url'];
 
+    public function hasImageAttachment(): bool
+    {
+        if (!$this->attachment_path) {
+            return false;
+        }
+
+        return in_array($this->attachmentExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'], true);
+    }
+
+    public function attachmentExtension(): ?string
+    {
+        if (!$this->attachment_path) {
+            return null;
+        }
+
+        return strtolower(pathinfo($this->attachment_path, PATHINFO_EXTENSION));
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'paste_user');

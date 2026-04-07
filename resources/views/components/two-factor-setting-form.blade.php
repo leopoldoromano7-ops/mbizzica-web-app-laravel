@@ -1,51 +1,57 @@
 @if (session('status'))
-    <div>
-        STATUS: {{ session('status') }}
+    <div class="alert alert-success status-banner">
+        {{ session('status') }}
     </div>
 @endif
 
-
-{{-- 2FA NON attiva --}}
 @if (!auth()->user()->two_factor_secret)
-    <form method="POST" action="/user/two-factor-authentication">
-        @csrf
-        <button type="submit" class="btn btn-primary mt-3">
-            Abilita la 2FA
-        </button>
-    </form>
+    <div class="settings-stack">
+        <p class="page-lead mb-0">La 2FA non e attiva. Puoi abilitarla per proteggere meglio il tuo account.</p>
+
+        <form method="POST" action="/user/two-factor-authentication">
+            @csrf
+            <button type="submit" class="btn btn-neon">
+                Abilita la 2FA
+            </button>
+        </form>
+    </div>
 @endif
 
-
-{{-- 2codice da digitare --}}
 @if (auth()->user()->two_factor_secret && !auth()->user()->two_factor_confirmed_at)
+    <div class="settings-stack">
+        <p class="page-lead mb-0">Scansiona il QR code e inserisci il codice a 6 cifre per completare l'attivazione.</p>
 
-    <p>Scansiona il QR code:</p>
-    {!! auth()->user()->twoFactorQrCodeSvg() !!}
+        <div class="qr-shell">
+            {!! auth()->user()->twoFactorQrCodeSvg() !!}
+        </div>
 
-    <form method="POST" action="/user/confirmed-two-factor-authentication">
-        @csrf
-        <input type="text" name="code" placeholder="Codice 6 cifre" required autocomplete="one-time-code">
+        <form method="POST" action="/user/confirmed-two-factor-authentication" class="stack-form">
+            @csrf
 
-        <button type="submit" class="btn btn-primary mt-3">
-            Conferma
-        </button>
-    </form>
+            <div class="field-group">
+                <label for="code" class="form-label">Codice di conferma</label>
+                <input type="text" id="code" name="code" class="form-control" placeholder="Codice 6 cifre" required autocomplete="one-time-code">
+            </div>
 
+            <button type="submit" class="btn btn-neon">
+                Conferma
+            </button>
+        </form>
+    </div>
 @endif
 
-
-{{-- 2FA attiva  --}}
 @if (auth()->user()->two_factor_confirmed_at)
+    <div class="settings-stack">
+        <span class="status-chip">2FA attiva</span>
+        <p class="page-lead mb-0">La verifica a due fattori e gia abilitata sul tuo account.</p>
 
-    <p class="mt-3"><strong>La 2FA è attiva</strong></p>
+        <form method="POST" action="/user/two-factor-authentication">
+            @csrf
+            @method('DELETE')
 
-    <form method="POST" action="/user/two-factor-authentication">
-        @csrf
-        @method('DELETE')
-
-        <button type="submit" class="btn btn-danger mt-2">
-            Disabilita 2FA
-        </button>
-    </form>
-
+            <button type="submit" class="btn btn-danger">
+                Disabilita 2FA
+            </button>
+        </form>
+    </div>
 @endif

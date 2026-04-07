@@ -1,17 +1,22 @@
-<div class="card-comments mt-3">
-    <h6>Commenti</h6>
+<div class="card-comments">
+    <div class="comments-header">
+        <h6>Commenti</h6>
+        <span class="comment-count">{{ $paste->comments->count() }} elementi</span>
+    </div>
 
-    @foreach($paste->comments as $comment)
-        <div class="comment mb-2 p-2" style="background:#f5f5f5; border-radius:5px;">
-            <strong>{{ $comment->authorName() }}:</strong> {{ $comment->content }}
-        </div>
-    @endforeach
+    <div class="comments-stream">
+        @forelse($paste->comments as $comment)
+            <div class="comment">
+                <strong>{{ $comment->authorName() }}:</strong> {{ $comment->content }}
+            </div>
+        @empty
+            <p class="empty-note">Nessun commento per questo paste.</p>
+        @endforelse
+    </div>
 
-    <form action="{{ route('paste.comment', $paste->id) }}" method="POST" class="mt-2">
+    <form action="{{ route('paste.comment', $paste->id) }}" method="POST" class="comment-form">
         @csrf
-        <div class="input-group">
-            <input type="text" name="content" class="form-control form-control-sm" placeholder="Aggiungi un commento...">
-            <button type="submit" class="btn btn-sm btn-primary">Invia</button>
-        </div>
+        <input type="text" name="content" class="form-control" placeholder="Aggiungi un commento...">
+        <button type="submit" class="btn btn-primary">Invia</button>
     </form>
 </div>

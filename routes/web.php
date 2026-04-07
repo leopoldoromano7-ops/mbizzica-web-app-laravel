@@ -13,6 +13,8 @@ Route::get('/', [PublicController::class, 'home'])->name('homepage');
 Route::get('pastes/index', [PasteController::class, 'index'])->name('pastes.index');
 Route::get('pastes/create', [PasteController::class, 'create'])->name('pastes.create');
 Route::post('paste/store', [PasteController::class, 'store'])->name('paste.store');
+Route::get('/paste/{id}/attachment', [PasteController::class, 'showAttachment'])->name('paste.attachment.show');
+Route::get('/paste/{id}/attachment/download', [PasteController::class, 'downloadAttachment'])->name('paste.attachment.download');
 
 //url univocas
 Route::get('/paste/{url}', [PasteController::class, 'show'])->name('paste.show');

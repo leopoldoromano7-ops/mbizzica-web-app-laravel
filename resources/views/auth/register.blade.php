@@ -1,16 +1,15 @@
 <x-layout>
-
-    <main class="container">
-        <section class="row">
-            <article class="col-12 text-center">
-                <h1 class="display">Registrazione</h1>
-            </article>
+    <main class="page-shell page-shell--narrow">
+        <section class="surface-panel page-hero page-hero--compact">
+            <div>
+                <p class="section-kicker">Create account</p>
+                <h1>Registrazione</h1>
+                <p class="page-lead">Un onboarding piu coerente con il nuovo tema, senza toccare il flusso di autenticazione.</p>
+            </div>
         </section>
 
         <x-registration-form />
-        <lead class="text-center mt-3">
-            Hai già un account? <a href="{{ route('login') }}">Accedi</a>
-        </lead>
-    </main>
 
+        <p class="auth-links">Hai gia un account? <a href="{{ route('login') }}">Accedi</a></p>
+    </main>
 </x-layout>

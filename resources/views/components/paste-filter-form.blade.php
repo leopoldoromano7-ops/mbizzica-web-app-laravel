@@ -1,25 +1,20 @@
-<form method="GET" action="{{ route('pastes.index') }}" class="mb-3">
-
-    <div class="row g-2">
-        <div class="col-md-6">
-            <input  class="form-control" type="text" name="q"   placeholder="Cerca..."value="{{ request('q') }}">
-        </div>
-
-        <div class="col-md-4">
-            <select name="tag" class="form-control">
-                <option value="">Tutti</option>
-                @foreach($tags as $tag)
-                    <option value="{{ $tag->id }}"
-                        {{ request('tag') == $tag->id ? 'selected' : '' }}>
-                        {{ $tag->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-2 d-grid">
-            <button class="btn btn-primary" type="submit">Filtra</button>
-        </div>
+<form method="GET" action="{{ route('pastes.index') }}" class="filter-form">
+    <div class="field-group">
+        <label for="q" class="form-label">Ricerca</label>
+        <input class="form-control" type="text" id="q" name="q" placeholder="Cerca per titolo o contenuto" value="{{ request('q') }}">
     </div>
 
+    <div class="field-group">
+        <label for="tag" class="form-label">Tag</label>
+        <select id="tag" name="tag" class="form-select">
+            <option value="">Tutti</option>
+            @foreach($tags as $tag)
+                <option value="{{ $tag->id }}" {{ request('tag') == $tag->id ? 'selected' : '' }}>
+                    {{ $tag->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <button class="btn btn-neon w-100" type="submit">Filtra archivio</button>
 </form>

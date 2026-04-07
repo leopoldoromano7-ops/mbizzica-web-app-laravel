@@ -12,9 +12,8 @@ Web application built with Laravel that allows users to create, share and manage
 - Search and filtering
 - Tags and categories
 - File upload support
-- Comments and voting system
+- Comments 
 - REST API
-- Notifications system
 
 ## 🛠️ Tech Stack
 

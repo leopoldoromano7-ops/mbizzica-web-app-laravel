@@ -1,11 +1,15 @@
 <x-layout>
-        <main class="container">
-            <section class="row">
-                <article class="col-12  text-center my-4">
-                <h1 class="display">Modifica il Pastee</h1>
-                </article>
-            </section>
-            {{-- Undefined variable $paste!!! mmi devo ricorda dipassare la variabile per i components --}}
-            <x-paste-edit-form  :paste="$paste" />
-        </main>
-    </x-layout>
+    <main class="page-shell">
+        <section class="surface-panel page-hero page-hero--compact">
+            <div>
+                <p class="section-kicker">Edit</p>
+                <h1>Modifica il paste</h1>
+                <p class="page-lead">Stessa logica di aggiornamento, ma dentro una superficie piu coerente con il nuovo linguaggio visivo.</p>
+            </div>
+
+            <a href="{{ route('paste.show', $paste->url) }}" class="btn btn-ghost">Torna al dettaglio</a>
+        </section>
+
+        <x-paste-edit-form :paste="$paste" />
+    </main>
+</x-layout>

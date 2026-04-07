@@ -1,20 +1,21 @@
 <x-layout>
-    
-    {{-- messagio di sucesso --}}
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
+    <main class="page-shell">
+        @if (session('status'))
+            <div class="alert alert-success status-banner">
+                {{ session('status') }}
+            </div>
+        @endif
 
-        <main class="container">
-            <section class="row">
-                <article class="col-12 text-center">
-                    <h1 class="display">Crea nuovo Paste</h1>
-                </article>
-            </section>
-            
-            <x-paste-form />
+        <section class="surface-panel page-hero page-hero--compact">
+            <div>
+                <p class="section-kicker">Create</p>
+                <h1>Crea nuovo paste</h1>
+                <p class="page-lead">Editor scuro, tipografia piu tecnica e controlli raccolti in una shell unica, senza cambiare il comportamento del form.</p>
+            </div>
 
-        </main>
+            <a href="{{ route('pastes.index') }}" class="btn btn-ghost">Vai all'archivio</a>
+        </section>
+
+        <x-paste-form />
+    </main>
 </x-layout>

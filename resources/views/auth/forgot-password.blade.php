@@ -1,34 +1,36 @@
 <x-layout>
-    <main class="container">
-        <section class="row">
-            <article class="col-12 text-center mt-5">
-                <h5>Password dimenticata? Invia la tua email e riceverai un link per reimpostarla</h1>
-            </article>
+    <main class="page-shell page-shell--narrow">
+        <section class="surface-panel page-hero page-hero--compact">
+            <div>
+                <p class="section-kicker">Recovery</p>
+                <h1>Password dimenticata</h1>
+                <p class="page-lead">Invia la tua email e riceverai un link per reimpostare l'accesso.</p>
+            </div>
         </section>
 
-        <section class="row justify-content-center mt-4">
-            <article class="col-12 col-md-6">
-                <form method="POST" action="{{ route('password.email') }}">
+        <section class="auth-shell">
+            <article class="surface-panel auth-panel">
+                <form method="POST" action="{{ route('password.email') }}" class="stack-form">
                     @csrf
-                    <div class="mb-3">
+                    <div class="field-group">
                         <label for="email" class="form-label">Email</label>
                         <input class="form-control" type="email" name="email" id="email" value="{{ old('email') }}" required>
                     </div>
-                    <button type="submit" class="btn btn-warning w-100">Reimposta la password</button>
+                    <button type="submit" class="btn btn-warning">Reimposta la password</button>
                 </form>
             </article>
         </section>
-    </main>
-    
-@if(session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
-@endif
 
-@error('email')
-    <div class="alert alert-danger">
-        {{ $message }}
-    </div>
-@enderror
+        @if(session('status'))
+            <div class="alert alert-success status-banner mt-4">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @error('email')
+            <div class="alert alert-danger status-banner mt-4">
+                {{ $message }}
+            </div>
+        @enderror
+    </main>
 </x-layout>

@@ -1,20 +1,18 @@
-<footer class="bg-dark text-white py-4 text-center">
-  <div class="container">
-    <div class="row align-items-center">
-
-      <div class="col-md-6 mb-3 mb-md-0">
-        <p class="mb-1"><strong>Iscriviti alla nostra newsletter</strong></p>
+<footer class="site-footer">
+  <div class="shell-container">
+    <div class="surface-panel footer-panel">
+      <div class="footer-copy">
+        <p class="section-kicker">Newsletter</p>
+        <h2>Resta nel flusso senza uscire dalla console.</h2>
+        <p class="page-lead mb-0">Aggiornamenti, novita e reminder in un blocco semplice e veloce, con lo stesso mood dell'interfaccia.</p>
       </div>
 
-      <div class="col-md-6">
-        <form action="{{ route('send.email') }}" method="POST" class="d-flex gap-2 justify-content-end">
-          @csrf
-          <input type="text" name="username" class="form-control form-control-sm" placeholder="Nome" required>
-          <input type="email" name="email" class="form-control form-control-sm" placeholder="Email" required>
-          <button type="submit" class="btn btn-primary btn-sm">Iscriviti</button>
-        </form>
-      </div>
-
+      <form action="{{ route('send.email') }}" method="POST" class="footer-form">
+        @csrf
+        <input type="text" name="username" class="form-control" placeholder="Nome" required>
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
+        <button type="submit" class="btn btn-neon">Iscriviti</button>
+      </form>
     </div>
   </div>
 </footer>

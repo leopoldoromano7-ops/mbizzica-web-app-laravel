@@ -19,11 +19,16 @@ class PasteController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $tags = Tag::query()->orderBy('name')->get();
 
-        //req del db on query
-        $pastes = Paste::query()
-            ->where(function ($q) use ($userId) {
-                $q->where('visibility', 0) ->orWhere('user_id', $userId);
+        // unlisted e privati non devono finire nell'archivio guest
+        $pastes = Paste::query();
+
+        if ($userId) {
+            $pastes->where(function ($q) use ($userId) {
+                $q->where('visibility', 0)->orWhere('user_id', $userId);
             });
+        } else {
+            $pastes->where('visibility', 0);
+        }
 
         // se non raggruppocome passa il filtro
         if ($request->tag) {
@@ -86,9 +91,16 @@ class PasteController extends Controller
         $tagIds = collect(explode(',', $request->tags ?? ''))->map(fn($t) => trim($t))->filter()->map(fn($t) => Tag::firstOrCreate(['name' => $t])->id)->toArray();
 
         $paste->tags()->sync($tagIds);
-        // ritorniamo alla view
-        // return redirect()->route('pastes.index');
-        return redirect(route('pastes.create'))->with('status', 'Paste creato veramente bene figa!');
+
+        if ((int) $paste->visibility === 2) {
+            return redirect()
+                ->route('paste.show', $paste->url)
+                ->with('status', 'Paste non elencato creato. Da qui puoi copiare e condividere il link.');
+        }
+
+        return redirect()
+            ->route('pastes.create')
+            ->with('status', 'Paste creato veramente bene figa!');
     }
 
     // sono stupido ma non so perche mi da rosso in teoria vVa nel disco public e prende il file nel percorso
@@ -98,6 +110,29 @@ class PasteController extends Controller
         $paste = Paste::findOrFail($id);
 
         return Storage::disk('public')->download($paste->file_path);
+    }
+
+    public function showAttachment($id)
+    {
+        $paste = $this->resolveAttachmentPaste($id);
+        $attachmentPath = Storage::disk('public')->path($paste->attachment_path);
+
+        return response()->file($attachmentPath, [
+            'Content-Type' => Storage::disk('public')->mimeType($paste->attachment_path) ?: 'application/octet-stream',
+        ]);
+    }
+
+    public function downloadAttachment($id)
+    {
+        $paste = $this->resolveAttachmentPaste($id);
+        $extension = $paste->attachmentExtension();
+        $filename = Str::slug($paste->title ?: 'allegato');
+
+        if ($extension) {
+            $filename .= '.' . $extension;
+        }
+
+        return Storage::disk('public')->download($paste->attachment_path, $filename);
     }
 
     public function show($url)
@@ -181,8 +216,8 @@ class PasteController extends Controller
         $paste = Paste::findOrFail($id);
 
         //canzella file
-        if ($paste->attachment) {
-            Storage::disk('public')->delete($paste->attachment);
+        if ($paste->attachment_path) {
+            Storage::disk('public')->delete($paste->attachment_path);
         }
 
         $paste->delete();
@@ -206,6 +241,21 @@ class PasteController extends Controller
         ]);
 
         return back()->with('status', 'Commento aggiunto!');
+    }
+
+    protected function resolveAttachmentPaste($id): Paste
+    {
+        $paste = Paste::findOrFail($id);
+
+        if ($paste->visibility == 1 && Auth::id() !== $paste->user_id) {
+            abort(403);
+        }
+
+        if (!$paste->attachment_path || !Storage::disk('public')->exists($paste->attachment_path)) {
+            abort(404);
+        }
+
+        return $paste;
     }
 }
 
